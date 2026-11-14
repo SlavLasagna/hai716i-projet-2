@@ -14,18 +14,24 @@ class Game:
         self.current_round = 0
         self.score1, self.score2 = 0, 0
 
-    def calculate_score(self):
-        self.score1 += POINT_MATRIX[ord(self.strategy1.last_move)-ord('C')][ord(self.strategy2.last_move)-ord('C')][0]
-        self.score2 += POINT_MATRIX[ord(self.strategy1.last_move)-ord('C')][ord(self.strategy2.last_move)-ord('C')][1]
+    def calculate_scores(self, last_move: str, o_last_move: str):
+        return POINT_MATRIX[ord(last_move)-ord('C')][ord(o_last_move)-ord('C')]
 
-    def play_round(self):
+    def play_round(self, verbose: bool):
         last_move_1 = self.strategy1.last_move
         last_move_2 = self.strategy2.last_move
         self.strategy1.apply(self.current_round, last_move_2)
         self.strategy2.apply(self.current_round, last_move_1)
-        self.calculate_score()
+        scores = self.calculate_scores(self.strategy1.last_move, self.strategy2.last_move)
+        self.score1 += scores[0]
+        self.score2 += scores[1]
+        if verbose > 1:
+            print(f"\t\t{self.strategy1.__class__.__name__}: {self.strategy1.last_move} (+{scores[0]})")
+            print(f"\t\t{self.strategy2.__class__.__name__}: {self.strategy2.last_move} (+{scores[1]})")
 
-    def resolve(self):
+    def resolve(self, verbose: int):
         for i in range(self.nb_rounds):
-            self.play_round()
+            if verbose > 1:
+                print(f"\tRound {i}:")
+            self.play_round(verbose)
             self.current_round += 1
