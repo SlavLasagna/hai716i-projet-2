@@ -17,7 +17,7 @@ class Game:
     def calculate_scores(self, last_move: str, o_last_move: str):
         return POINT_MATRIX[ord(last_move)-ord('C')][ord(o_last_move)-ord('C')]
 
-    def play_round(self, verbose: bool):
+    def play_round(self, verbose: int):
         last_move_1 = self.strategy1.last_move
         last_move_2 = self.strategy2.last_move
         self.strategy1.apply(self.current_round, last_move_2)
