@@ -10,7 +10,7 @@ def parse_args(argv: list[str]):
 
     parser.add_argument("-r", "--rounds", help="Number of rounds per game", type=int, default=200)
     parser.add_argument("-g", "--games", help="Number of games per pool", type=int, default = 5)
-    parser.add_argument("-s", "--seed", help="Random seed", type=int, default = 0xDEADBEEF)
+    parser.add_argument("-s", "--seed", help="Random seed", type=int, default = None)
     parser.add_argument("-n", "--noise", help="Noise percentage", type=float, default = 0.0)
     parser.add_argument("-z", "--horizon", help="Horizon percentage", type=float, default = 0.0)
     parser.add_argument("-p", "--points", help="Points matrix, formatted C,C:C,D:D,C:D,D", type=str, default = "3,3:0,5:5,0:2,2")
