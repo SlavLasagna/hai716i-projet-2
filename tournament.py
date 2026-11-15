@@ -2,23 +2,26 @@ from game import Game
 from strategy import *
 
 class Tournament:
-    def __init__(self, nb_rounds, nb_games):
+    def __init__(self, nb_rounds: int, nb_games: int, noise: float, horizon: float, point_matrix: list[list[tuple[int,int]]]):
         self.nb_rounds = nb_rounds
         self.nb_games = nb_games
+        self.noise = noise
+        self.horizon = horizon
+        self.point_matrix = point_matrix
         self.strategies = {
             "AllD": AllD,
             "Random": Random,
             "TFT": TFT,
             "Tester": Tester,
             "Joss": Joss,
-            "TooNice": TooNice,
+            "TooNice": AllC,
             "TF2T": TF2T,
         }
         self.scores = {k: 0 for k,_ in self.strategies.items()}
 
     def play_game(self, s1: str, s2: str, n: int, verbose: int = 0) -> None:
         strategy1, strategy2 = self.strategies[s1], self.strategies[s2]
-        game = Game(strategy1(), strategy2(), self.nb_rounds)
+        game = Game(strategy1(), strategy2(), self.nb_rounds, self.noise, self.horizon, self.point_matrix)
         game.resolve(verbose)
         self.scores[s1] += game.score1
         self.scores[s2] += game.score2
