@@ -1,22 +1,13 @@
 from game import Game
-from strategy import *
 
 class Tournament:
-    def __init__(self, nb_rounds: int, nb_games: int, noise: float, horizon: float, point_matrix: list[list[tuple[int,int]]]):
+    def __init__(self, nb_rounds: int, nb_games: int, strategies, noise: float, horizon: float, point_matrix: list[list[tuple[int,int]]]):
         self.nb_rounds = nb_rounds
         self.nb_games = nb_games
         self.noise = noise
         self.horizon = horizon
         self.point_matrix = point_matrix
-        self.strategies = {
-            "AllD": AllD,
-            "Random": Random,
-            "TFT": TFT,
-            "Tester": Tester,
-            "Joss": Joss,
-            "AllC": AllC,
-            "TF2T": TF2T,
-        }
+        self.strategies = strategies
         self.scores = {k: 0 for k,_ in self.strategies.items()}
         self.rounds = {k: 0 for k,_ in self.strategies.items()}
 
@@ -43,12 +34,3 @@ class Tournament:
                 for n in range(self.nb_games):
                     self.play_game(k1, k2, n, verbose)
             i += 1
-
-    def results(self) -> str:
-        s = "Average points per round :\n"
-        l = zip(self.scores.values(), self.strategies.keys(), self.rounds.values())
-        sorted_l = sorted(l, key=lambda x: x[0]/x[2], reverse=True)
-        for i, (score, strategy, rounds) in enumerate(sorted_l):
-            print(i, score, strategy, rounds)
-            s += f"{i+1}. {strategy}: {round(score/rounds, 3)}\n"
-        return s
