@@ -16,7 +16,7 @@ Options disponibles:
 
 - `-r <n>` ou `--rounds <n>` pour changer le nombre de tours par partie à `n`.
 - `-g <n>` ou `--games <n>` pour changer le nombre de parties par groupe à `n`.
-- `-t <n>` ou `--tournaments <n>` pour changer le nombre de tournois par groupe à `n`.
+- `-t <n>` ou `--tournaments <n>` pour changer le nombre de tournois à `n`.
 - `-s <n>` ou `--seed <n>` pour surcharger la seed du générateur aléatoire à `n`.
 - `-n <f>` ou `--noise <f>` pour que le bruit par coup soit de `f`%.
 - `-z <w>` ou `--horizon <w>` pour que les parties aient `w`% de chance de se terminer avant le nombre de tours.   
