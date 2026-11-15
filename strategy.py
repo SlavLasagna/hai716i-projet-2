@@ -12,7 +12,7 @@ class Strategy(ABC):
         self.last_move = ''
 
     @abstractmethod
-    def apply(self, round_n: int, o_last_move: str, noise: float) -> str:
+    def apply(self, round_n: int, o_last_move: str, noise: float) -> None:
         pass
 
 
@@ -20,17 +20,16 @@ class AllD(Strategy):
     """
     Always plays 'D'
     """
-    def apply(self, round_n: int, o_last_move: str, noise: float) -> str:
-        self.last_move = 'D'
-        return noised_move(self.last_move, noise)
+    def apply(self, round_n: int, o_last_move: str, noise: float) -> None:
+        self.last_move = noised_move('D', noise)
 
 class Random(Strategy):
     """
     Plays 'C' or 'D' randomly
     """
-    def apply(self, round_n: int, o_last_move: str, noise: float) -> str:
+    def apply(self, round_n: int, o_last_move: str, noise: float) -> None:
         self.last_move = 'D' if random() > 0.50 else 'C'
-        return noised_move(self.last_move, noise)
+        self.last_move = noised_move(self.last_move, noise)
 
 
 class TFT(Strategy):
@@ -38,9 +37,9 @@ class TFT(Strategy):
     Tit-For-Tat:
     Plays 'C' on the first round, then plays the opponent's last move
     """
-    def apply(self, round_n: int, o_last_move: str, noise: float) -> str:
+    def apply(self, round_n: int, o_last_move: str, noise: float) -> None:
         self.last_move = 'C' if round_n == 0 else o_last_move
-        return noised_move(self.last_move, noise)
+        self.last_move = noised_move(self.last_move, noise)
 
 class Tester(Strategy):
     """
@@ -52,7 +51,7 @@ class Tester(Strategy):
         self.repeat = 0
         self.retaliated = False
 
-    def apply(self, round_n, o_last_move, noise: float):
+    def apply(self, round_n, o_last_move, noise: float) -> None:
         if round_n == 0:
             self.last_move = 'D'
         elif self.retaliated:
@@ -62,7 +61,7 @@ class Tester(Strategy):
             self.last_move = 'C'
         else:
             self.last_move = 'D' if (round_n - 1) % 3 == 2 else 'C'
-        return noised_move(self.last_move, noise)
+        self.last_move = noised_move(self.last_move, noise)
 
 class Joss(Strategy):
     """
@@ -72,18 +71,18 @@ class Joss(Strategy):
         super().__init__()
         self.c_occurrences = 1
 
-    def apply(self, round_n: int, o_last_move: str, noise: float) -> str:
+    def apply(self, round_n: int, o_last_move: str, noise: float) -> None:
         move = 'C' if round_n == 0 else o_last_move
         self.last_move = 'D' if move == 'C' and random() < 0.1 else move
-        return noised_move(self.last_move, noise)
+        self.last_move = noised_move(self.last_move, noise)
 
 class AllC(Strategy):
     """
     Always plays 'C'.
     """
-    def apply(self, round_n: int, o_last_move: str, noise: float) -> str:
+    def apply(self, round_n: int, o_last_move: str, noise: float) -> None:
         self.last_move = 'C'
-        return noised_move(self.last_move, noise)
+        self.last_move = noised_move(self.last_move, noise)
 
 class TF2T(Strategy):
     """
@@ -94,7 +93,7 @@ class TF2T(Strategy):
         super().__init__()
         self.o_prev = ''  # coup adverse vu au tour précédent
 
-    def apply(self, round_n: int, o_last_move: str, noise: float) -> str:
+    def apply(self, round_n: int, o_last_move: str, noise: float) -> None:
         self.last_move = 'D' if o_last_move == 'D' and self.o_prev == 'D' else 'C'
         self.o_prev = o_last_move
-        return noised_move(self.last_move, noise)
+        self.last_move = noised_move(self.last_move, noise)

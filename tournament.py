@@ -14,19 +14,22 @@ class Tournament:
             "TFT": TFT,
             "Tester": Tester,
             "Joss": Joss,
-            "TooNice": AllC,
+            "AllC": AllC,
             "TF2T": TF2T,
         }
         self.scores = {k: 0 for k,_ in self.strategies.items()}
+        self.rounds = {k: 0 for k,_ in self.strategies.items()}
 
     def play_game(self, s1: str, s2: str, n: int, verbose: int = 0) -> None:
         strategy1, strategy2 = self.strategies[s1], self.strategies[s2]
         game = Game(strategy1(), strategy2(), self.nb_rounds, self.noise, self.horizon, self.point_matrix)
-        game.resolve(verbose)
+        rounds = game.resolve(verbose)
         self.scores[s1] += game.score1
         self.scores[s2] += game.score2
+        self.rounds[s1] += rounds
+        self.rounds[s2] += rounds
         if verbose > 0:
-            print(f"\tGame {n}: {s1} scored {game.score1} points; {s2} scored {game.score2} points")
+            print(f"\tGame {n}: {s1} scored {game.score1} points; {s2} scored {game.score2} points over {rounds} rounds")
 
     def start(self, verbose: int) -> None:
         keys = list(self.strategies.keys())
@@ -43,9 +46,9 @@ class Tournament:
 
     def results(self) -> str:
         s = "Average points per round :\n"
-        l = zip(self.scores.values(), self.strategies.keys())
-        sorted_l = sorted(l, key=lambda x: x[0], reverse=True)
-        for i, (score, strategy) in enumerate(sorted_l):
-            average = score/(self.nb_games*self.nb_rounds*(len(self.strategies)-1))
-            s += f"{i+1}. {strategy}: {round(average, 3)}\n"
+        l = zip(self.scores.values(), self.strategies.keys(), self.rounds.values())
+        sorted_l = sorted(l, key=lambda x: x[0]/x[2], reverse=True)
+        for i, (score, strategy, rounds) in enumerate(sorted_l):
+            print(i, score, strategy, rounds)
+            s += f"{i+1}. {strategy}: {round(score/rounds, 3)}\n"
         return s

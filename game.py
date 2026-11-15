@@ -27,13 +27,14 @@ class Game:
             print(f"\t\t{self.strategy1.__class__.__name__}: {self.strategy1.last_move} (+{scores[0]})")
             print(f"\t\t{self.strategy2.__class__.__name__}: {self.strategy2.last_move} (+{scores[1]})")
 
-    def resolve(self, verbose: int):
+    def resolve(self, verbose: int) -> int:
         for i in range(self.nb_rounds):
-            if random() > (1-self.horizon):
-                if verbose > 0:
-                    print(f"\tHorizon reached at round {i}")
-                break
             if verbose > 1:
-                print(f"\tRound {i}:")
+                print(f"\tRound {i+1}:")
             self.play_round(verbose)
             self.current_round += 1
+            if random() > (1-self.horizon):
+                if verbose > 0:
+                    print(f"\tHorizon reached at round {i+1}")
+                return i+1
+        return self.nb_rounds
